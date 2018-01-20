@@ -27,7 +27,7 @@ func New(v *nvim.Nvim, name string) *Nimvle {
 
 // Log is a wrapped `:echom`
 func (n *Nimvle) Log(message interface{}) error {
-	return n.v.Command("echom '" + pluginName + ": " + fmt.Sprintf("%v", message) + "'")
+	return n.v.Command("echom '" + n.pluginName + ": " + fmt.Sprintf("%v", message) + "'")
 }
 
 // CurrentBufferFilenameExtension obtains the file name extension of the current buffer.
@@ -129,7 +129,7 @@ func (n *Nimvle) SplitOpenBuffer(buf nvim.Buffer) error {
 }
 
 // NewScratchBuffer creates new scratch buffer.
-func (n *Nimvle) NewScratchBuffer(bufferName string) (nvim.Buffer, error) {
+func (n *Nimvle) NewScratchBuffer(bufferName string) (*nvim.Buffer, error) {
 	var scratchBuf nvim.Buffer
 	var bwin nvim.Window
 	var win nvim.Window
@@ -154,16 +154,16 @@ func (n *Nimvle) NewScratchBuffer(bufferName string) (nvim.Buffer, error) {
 		return nil, err
 	}
 
-	return scratchBuf, nil
+	return &scratchBuf, nil
 }
 
 // ShowScratchBuffer shows selected buffer.
 func (n *Nimvle) ShowScratchBuffer(scratch nvim.Buffer, str fmt.Stringer) error {
 	var opened bool
-	var scratch *nvim.Buffer
-	var err error
 
-	n.SetContentToBuffer(scratch, str.String())
+	if err := n.SetContentToBuffer(scratch, str.String()); err != nil {
+		return err
+	}
 
 	winls, err := n.GetWindowList()
 	if err != nil {
