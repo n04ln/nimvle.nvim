@@ -11,11 +11,13 @@ const (
 	getWindowList = `vivid#getWindowList()`
 )
 
+// Nimvle provides nvim methods around the nvim.Nvim interface.
 type Nimvle struct {
 	v          *nvim.Nvim
 	pluginName string
 }
 
+// New makes a new Nvimutils object for the specified nvim.Nvim.
 func New(v *nvim.Nvim, name string) *Nimvle {
 	return &Nimvle{
 		v:          v,
@@ -23,10 +25,12 @@ func New(v *nvim.Nvim, name string) *Nimvle {
 	}
 }
 
+// Log is a wrapped `:echom`
 func (n *Nimvle) Log(message interface{}) error {
 	return n.v.Command("echom '" + pluginName + ": " + fmt.Sprintf("%v", message) + "'")
 }
 
+// CurrentBufferFilenameExtension obtains the file name extension of the current buffer.
 func (n *Nimvle) CurrentBufferFilenameExtension() (string, error) {
 	buf, err := n.v.CurrentBuffer()
 	if err != nil {
@@ -43,6 +47,7 @@ func (n *Nimvle) CurrentBufferFilenameExtension() (string, error) {
 	return dotName, nil
 }
 
+// GetContentFromCurrentBuffer obtains the content of the current buffer.
 func (n *Nimvle) GetContentFromCurrentBuffer() (string, error) {
 	buf, err := n.v.CurrentBuffer()
 	if err != nil {
@@ -65,6 +70,7 @@ func (n *Nimvle) GetContentFromCurrentBuffer() (string, error) {
 	return content, nil
 }
 
+// GetContentFromBuffer obtains the content of the buffer.
 func (n *Nimvle) GetContentFromBuffer(buf nvim.Buffer) (string, error) {
 	lines, err := n.v.BufferLines(buf, 0, -1, true)
 	if err != nil {
@@ -82,6 +88,7 @@ func (n *Nimvle) GetContentFromBuffer(buf nvim.Buffer) (string, error) {
 	return content, nil
 }
 
+// SetContentToBuffer writes content to buffer.
 func (n *Nimvle) SetContentToBuffer(buf nvim.Buffer, content string) error {
 	var byteContent [][]byte
 
@@ -93,6 +100,7 @@ func (n *Nimvle) SetContentToBuffer(buf nvim.Buffer, content string) error {
 	return n.v.SetBufferLines(buf, 0, -1, true, byteContent)
 }
 
+// GetWindowList obtains window list. It depends on `NoahOrberg/vivid.vim`
 func (n *Nimvle) GetWindowList() (map[string]int, error) {
 	res := make(map[string]int)
 
@@ -103,6 +111,7 @@ func (n *Nimvle) GetWindowList() (map[string]int, error) {
 	return res, nil
 }
 
+// SplitOpenBuffer divides and opens buffer.
 func (n *Nimvle) SplitOpenBuffer(buf nvim.Buffer) error {
 	var bwin nvim.Window
 	var win nvim.Window
@@ -119,7 +128,8 @@ func (n *Nimvle) SplitOpenBuffer(buf nvim.Buffer) error {
 	return n.v.SetCurrentWindow(bwin)
 }
 
-func (n *Nimvle) NewScratchBuffer(bufferName string) (*nvim.Buffer, error) {
+// NewScratchBuffer creates new scratch buffer.
+func (n *Nimvle) NewScratchBuffer(bufferName string) (nvim.Buffer, error) {
 	var scratchBuf nvim.Buffer
 	var bwin nvim.Window
 	var win nvim.Window
@@ -144,11 +154,11 @@ func (n *Nimvle) NewScratchBuffer(bufferName string) (*nvim.Buffer, error) {
 		return nil, err
 	}
 
-	return &scratchBuf, nil
+	return scratchBuf, nil
 }
 
-// ScratchBufferを別ウィンドウで開いていればいいが、開かれていない場合などの処理
-func (n *Nimvle) showScratchBuffer(scratch nvim.Buffer, str fmt.Stringer) error {
+// ShowScratchBuffer shows selected buffer.
+func (n *Nimvle) ShowScratchBuffer(scratch nvim.Buffer, str fmt.Stringer) error {
 	var opened bool
 	var scratch *nvim.Buffer
 	var err error
@@ -176,6 +186,7 @@ func (n *Nimvle) showScratchBuffer(scratch nvim.Buffer, str fmt.Stringer) error 
 	return nil
 }
 
+// Input input in cmdline.
 func (n *Nimvle) Input(ask string) (string, error) {
 	var input string
 	if err := n.v.Eval(`input("`+ask+`: ")`, &input); err != nil {
