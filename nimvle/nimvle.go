@@ -195,3 +195,23 @@ func (n *Nimvle) Input(ask string) (string, error) {
 
 	return input, nil
 }
+
+// Get Variable (return `interface{}`)
+func (n *Nimvle) GetVar(varname string) (interface{}, error) {
+	var v interface{}
+	if err := n.v.Var(varname, &v); err != nil {
+		return nil, err
+	}
+
+	return v, nil
+}
+
+// Eval expression
+func (n *Nimvle) Eval(exp string) (interface{}, error) {
+	var res interface{}
+	if err := n.v.Eval(exp, &res); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
