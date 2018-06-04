@@ -88,17 +88,28 @@ func (n *Nimvle) GetContentFromBuffer(buf nvim.Buffer) (string, error) {
 	return content, nil
 }
 
-// SetContentToBuffer writes content to buffer.
-func (n *Nimvle) SetContentToBuffer(buf nvim.Buffer, str fmt.Stringer) error {
+func setContentToBuffer(buf nvim.Buffer, lines []string) error {
 	var byteContent [][]byte
-
-	content := fmt.Sprint(str)
-	tmp := strings.Split(content, "\n")
-	for _, c := range tmp {
+	for _, c := range lines {
 		byteContent = append(byteContent, []byte(c))
 	}
 
 	return n.v.SetBufferLines(buf, 0, -1, true, byteContent)
+}
+
+// SetContentToBuffer writes content to buffer.
+func (n *Nimvle) SetContentToBuffer(buf nvim.Buffer, content string) error {
+	lines := strings.Split(content, "\n")
+
+	return setContentToBuffer(buf, lines)
+}
+
+// SetStringerContentToBuffer writes stringer content to buffer.
+func (n *Nimvle) SetStringerContentToBuffer(buf nvim.Buffer, str fmt.Stringer) error {
+	content := fmt.Sprint(str)
+	lines := strings.Split(content, "\n")
+
+	return setContentToBuffer(buf, lines)
 }
 
 // GetWindowList obtains window list. It depends on `NoahOrberg/vivid.vim`
