@@ -101,7 +101,7 @@ func (n *Nimvle) setContentToBuffer(buf nvim.Buffer, lines []string) error {
 func (n *Nimvle) SetContentToBuffer(buf nvim.Buffer, content string) error {
 	lines := strings.Split(content, "\n")
 
-	return setContentToBuffer(buf, lines)
+	return n.setContentToBuffer(buf, lines)
 }
 
 // SetStringerContentToBuffer writes stringer content to buffer.
@@ -109,7 +109,7 @@ func (n *Nimvle) SetStringerContentToBuffer(buf nvim.Buffer, str fmt.Stringer) e
 	content := fmt.Sprint(str)
 	lines := strings.Split(content, "\n")
 
-	return setContentToBuffer(buf, lines)
+	return n.setContentToBuffer(buf, lines)
 }
 
 // GetWindowList obtains window list. It depends on `NoahOrberg/vivid.vim`
@@ -173,7 +173,7 @@ func (n *Nimvle) NewScratchBuffer(bufferName string) (*nvim.Buffer, error) {
 func (n *Nimvle) ShowScratchBuffer(scratch nvim.Buffer, str fmt.Stringer) error {
 	var opened bool
 
-	if err := n.SetContentToBuffer(scratch, str); err != nil {
+	if err := n.SetStringerContentToBuffer(scratch, str); err != nil {
 		return err
 	}
 
