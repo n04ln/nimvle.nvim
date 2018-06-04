@@ -162,7 +162,7 @@ func (n *Nimvle) NewScratchBuffer(bufferName string) (*nvim.Buffer, error) {
 func (n *Nimvle) ShowScratchBuffer(scratch nvim.Buffer, str fmt.Stringer) error {
 	var opened bool
 
-	if err := n.SetContentToBuffer(scratch, str.String()); err != nil {
+	if err := n.SetContentToBuffer(scratch, str); err != nil {
 		return err
 	}
 
