@@ -88,7 +88,7 @@ func (n *Nimvle) GetContentFromBuffer(buf nvim.Buffer) (string, error) {
 	return content, nil
 }
 
-func setContentToBuffer(buf nvim.Buffer, lines []string) error {
+func (n *Nimvle) setContentToBuffer(buf nvim.Buffer, lines []string) error {
 	var byteContent [][]byte
 	for _, c := range lines {
 		byteContent = append(byteContent, []byte(c))
