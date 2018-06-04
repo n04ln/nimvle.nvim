@@ -89,9 +89,10 @@ func (n *Nimvle) GetContentFromBuffer(buf nvim.Buffer) (string, error) {
 }
 
 // SetContentToBuffer writes content to buffer.
-func (n *Nimvle) SetContentToBuffer(buf nvim.Buffer, content string) error {
+func (n *Nimvle) SetContentToBuffer(buf nvim.Buffer, str fmt.Stringer) error {
 	var byteContent [][]byte
 
+	content := fmt.Sprint(str)
 	tmp := strings.Split(content, "\n")
 	for _, c := range tmp {
 		byteContent = append(byteContent, []byte(c))
