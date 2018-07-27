@@ -237,3 +237,8 @@ func (n *Nimvle) RedrawStatusLine() error {
 func (n *Nimvle) Redraw() error {
 	return n.v.Command("redraw")
 }
+
+// Command execute command
+func (n *Nimvle) Command(cmd string) error {
+	return n.v.Command(cmd)
+}
