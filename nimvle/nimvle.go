@@ -232,3 +232,8 @@ func (n *Nimvle) Eval(exp string) (interface{}, error) {
 func (n *Nimvle) RedrawStatusLine() error {
 	return n.v.Command("redrawstatus")
 }
+
+// Redraw redraw statusline
+func (n *Nimvle) Redraw() error {
+	return n.v.Command("redraw")
+}
