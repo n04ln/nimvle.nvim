@@ -141,7 +141,7 @@ func (n *Nimvle) SplitOpenBuffer(buf nvim.Buffer) error {
 }
 
 // NewScratchBuffer creates new scratch buffer.
-func (n *Nimvle) NewScratchBuffer(bufferName string) (*nvim.Buffer, error) {
+func (n *Nimvle) NewScratchBuffer(bufferName, ft string) (*nvim.Buffer, error) {
 	var scratchBuf nvim.Buffer
 	var bwin nvim.Window
 	var win nvim.Window
@@ -153,6 +153,8 @@ func (n *Nimvle) NewScratchBuffer(bufferName string) (*nvim.Buffer, error) {
 	b.SetBufferOption(scratchBuf, "buftype", "nofile")
 	b.SetBufferOption(scratchBuf, "bufhidden", "hide")
 	b.Command("setlocal noswapfile")
+	b.Command(
+		fmt.Sprintf("set filetype=%v", ft))
 	b.Command("setlocal nobuflisted")
 	b.SetBufferOption(scratchBuf, "undolevels", -1)
 	b.CurrentWindow(&win)
